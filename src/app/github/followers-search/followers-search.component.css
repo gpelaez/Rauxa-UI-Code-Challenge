@@ -1,0 +1,36 @@
+
+.mat-option {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.mat-list-item-content {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+img.mat-list-avatar {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.mat-list-text {
+    padding-left: 50px;
+    padding-right: 10px;
+    width: auto;
+    align-self: end;
+}
+
+h4 {
+    font-size: 14px;
+    margin: 0;
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,17 @@
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="Search Github User" aria-label="Number" [formControl]="searchTerm" [matAutocomplete]="auto">
+    </mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="userSelected($event)">
+        <mat-option *ngFor="let item of searchResult" [value]="item.login">
+            <mat-list-item>
+                <img matListAvatar src="{{item.avatar_url}}" alt="...">
+                <h4 mat-line>{{item.login}}</h4>
+            </mat-list-item>
+        </mat-option>
+    </mat-autocomplete>
+</form>
+
+<div class="user-details">
+    <app-user-details #userDetails></app-user-details>
+</div>
