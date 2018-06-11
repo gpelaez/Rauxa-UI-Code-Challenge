@@ -24,7 +24,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.paginator = this.followersPager;
   }
 
   ngOnInit() {
