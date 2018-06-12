@@ -14,6 +14,9 @@ export class UserDetailsComponent implements OnInit {
   followersPager: MatPaginator;
   @ViewChild('followersPager') set matPaginator(mp: MatPaginator) {
     this.followersPager = mp;
+    // this.followersPager.initialized.subscribe((data) => {
+    //   console.log('pager-initilized', data);
+    // })
   }
 
   
@@ -43,9 +46,6 @@ export class UserDetailsComponent implements OnInit {
   getFollowers() {
     this.dataProvider.userFollowers(this.user.login).subscribe((date) => {
       this.user['followers_data'] = date;
-    });
-    this.followersPager.page.subscribe(page =>  {
-      console.log(page);
     });
   }
 
