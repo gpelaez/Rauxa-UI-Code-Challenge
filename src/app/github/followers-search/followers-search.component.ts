@@ -19,6 +19,8 @@ export class FollowersSearchComponent implements OnInit {
   searchTerm: FormControl = new FormControl();
   searchResult = [];
 
+  selectedUsername: string = null;
+
   @ViewChild('userDetails') userDetails : UserDetailsComponent;
 
   constructor(private dataProvider: DataService) {
@@ -30,12 +32,11 @@ export class FollowersSearchComponent implements OnInit {
           });
       });
   }
-  userSelected(item: any) {
-    let username = item.option.value;
-    this.userDetails.loadUser(username);
-  }
-
   ngOnInit() {
   }
+  userSelected(item: any) {
+    this.selectedUsername = item.option.value;
+  }
+
 
 }

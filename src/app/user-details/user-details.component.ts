@@ -1,52 +1,76 @@
-import { Component, OnInit, Input, ViewChild} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, OnChanges} from '@angular/core';
 import { DataService } from '../github/data.service';
 import { MatPaginator } from '@angular/material';
+import { FollowersDataSource } from './followers-data-source';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.css']
 })
-export class UserDetailsComponent implements OnInit {
+export class UserDetailsComponent implements OnInit, OnChanges {
+   
 
-  @Input() user: any;
-
-  followersPager: MatPaginator;
-  @ViewChild('followersPager') set matPaginator(mp: MatPaginator) {
+  @Input() username: string;
+  
+  private followersPager : MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
     this.followersPager = mp;
-    // this.followersPager.initialized.subscribe((data) => {
-    //   console.log('pager-initilized', data);
-    // })
+    if(this.followersPager) {
+      this.followersPager.page
+      .pipe(
+        tap(() => this.loadFollowersPage(null))
+      )
+      .subscribe();
+    }
   }
 
-  
-  currentFollowers = [];
+  user: any;
+  followersDataSource: FollowersDataSource;
 
   constructor(private dataProvider: DataService) { 
-    this.user = null;
+    this.followersDataSource = new FollowersDataSource(this.dataProvider);
   }
-
-  ngAfterViewInit() {
-  }
-
+  
   ngOnInit() {
-    
+    this.loadFollowersPage(null);
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes.username) {
+      this.loadUser(changes.username.currentValue);
+    }
+  }
+  
+  ngAfterViewInit() {
+    
+
+  }
+
 
   loadUser(username: string) {
-    this.dataProvider.userDetails(username).subscribe(
+    this.username = username;
+    this.dataProvider.userDetails(this.username).subscribe(
       (userData: any) => {
-        userData['followers_data'] = [];
         this.user = userData;
-        this.getFollowers();
-        console.log(userData);
       }
-    )
+    );
+    this.loadFollowersPage(this.username);
   }
-  getFollowers() {
-    this.dataProvider.userFollowers(this.user.login).subscribe((date) => {
-      this.user['followers_data'] = date;
-    });
+
+  loadFollowersPage(username: string) {
+    if(!username) {
+      username = this.username || this.user.username;
+    }
+    let pageIndex = this.followersPager? this.followersPager.pageIndex || 0 : 0;
+    let pageSize = this.followersPager?  this.followersPager.pageSize || 10 : 10;
+    this.followersDataSource.loadFollowers(
+        username,
+        '',
+        'asc',
+        pageIndex,
+        pageSize);
   }
 
 }

@@ -29,18 +29,44 @@
   </div>
   <div class="main-content">
     <h4>User Followers</h4>
-    <mat-list>
-      <mat-list-item *ngFor="let follower of user.followers_data" (click)="loadUser(follower.login)">
-        <img matListAvatar src="{{follower.avatar_url}}" alt="...">
-        <h3 matLine> {{follower.login}} </h3>
-      </mat-list-item>
-    </mat-list>
-    <mat-paginator #followersPager 
+
+    <div class="spinner-container" *ngIf="followersDataSource.loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
+    <table mat-table [dataSource]="followersDataSource">
+      <!-- User name Definition -->
+      <ng-container cdkColumnDef="avatar_url">
+        <mat-header-cell *cdkHeaderCellDef> Avatar </mat-header-cell>
+        <mat-cell *cdkCellDef="let row"> 
+          <img matListAvatar src="{{row.avatar_url}}" alt="{{row.login}}}" width="38">
+        </mat-cell>
+      </ng-container>
+    
+      <!-- Title Definition -->
+      <ng-container cdkColumnDef="login">
+        <mat-header-cell *cdkHeaderCellDef> User Name </mat-header-cell>
+        <mat-cell *cdkCellDef="let row"> {{row.login}} </mat-cell>
+      </ng-container>
+
+      <!-- Title Definition -->
+      <ng-container cdkColumnDef="actions">
+          <mat-header-cell *cdkHeaderCellDef> Load Followers </mat-header-cell>
+          <mat-cell *cdkCellDef="let row"> 
+            <button mat-icon-button (click)="loadUser(row.login)">
+              <mat-icon aria-label="Follow User">details</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+    
+      <!-- Header and Row Declarations -->
+      <mat-header-row *cdkHeaderRowDef="['avatar_url', 'login', 'actions']"></mat-header-row>
+      <mat-row *cdkRowDef="let row; columns: ['avatar_url', 'login', 'actions']"></mat-row>
+    </table>
+    <mat-paginator  #followersPager
                     [length]="user.followers"
                     [pageSize]="10"
                     [pageSizeOptions]="[5, 10, 25, 100]">
     </mat-paginator>
-
 
   </div>
 </div>

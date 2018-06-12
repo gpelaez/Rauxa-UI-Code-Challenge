@@ -50,8 +50,11 @@ export class DataService {
     let action = 'users/' + username;
     return this.get(action);
   }
-  userFollowers(username: string): Observable<any> {
+  userFollowers(username: string, per_page: number = 0, page: number = 10): Observable<any> {
     let action = 'users/' + username + '/followers';
-    return this.get(action);
+    return this.get(action, {
+      per_page: per_page,
+      page: page
+    });
   }
 }

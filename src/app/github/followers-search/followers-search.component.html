@@ -12,6 +12,6 @@
     </mat-autocomplete>
 </form>
 
-<div class="user-details">
-    <app-user-details #userDetails></app-user-details>
+<div  *ngIf="selectedUsername" class="user-details">
+    <app-user-details [username]="selectedUsername" #userDetails></app-user-details>
 </div>
